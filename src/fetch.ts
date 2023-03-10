@@ -33,7 +33,7 @@ const fetch = async ( ms: number = 200 ): Promise<void> => {
 
   } finally {
 
-    setTimeout ( fetch, ms );
+    setTimeout ( fetch, ms, ms );
 
   }
 
