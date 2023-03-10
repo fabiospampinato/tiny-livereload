@@ -1,0 +1,53 @@
+{
+  "name": "tiny-livereload",
+  "repository": "github:fabiospampinato/tiny-livereload",
+  "description": "A tiny and basic livereload solution.",
+  "version": "1.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./express": {
+      "import": "./dist/express.js",
+      "types": "./dist/express.d.ts"
+    },
+    "./fetch": {
+      "import": "./dist/fetch.js",
+      "types": "./dist/fetch.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/index.d.ts"
+      ],
+      "express": [
+        "./dist/express.d.ts"
+      ],
+      "fetch": [
+        "./dist/fetch.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "clean": "tsex clean",
+    "compile": "tsex compile",
+    "compile:watch": "tsex compile --watch",
+    "prepublishOnly": "tsex prepare"
+  },
+  "keywords": [
+    "tiny",
+    "livereload",
+    "simple"
+  ],
+  "dependencies": {
+    "watcher": "^2.2.2"
+  },
+  "devDependencies": {
+    "tsex": "^2.2.2",
+    "typescript": "^4.9.5"
+  }
+}
