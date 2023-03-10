@@ -22,7 +22,7 @@ import livereload from 'tiny-livereload/fetch';
 livereload ( 200 );
 ```
 
-An `express` middleware for the backend is provided, which servers the `/__livereload__` request, potentially watching some file paths for changes too:
+An `express` middleware for the backend is provided, which serves the `/__livereload__` request, potentially watching some file paths for changes too:
 
 ```ts
 import express from 'express';
