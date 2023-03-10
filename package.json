@@ -2,7 +2,7 @@
   "name": "tiny-livereload",
   "repository": "github:fabiospampinato/tiny-livereload",
   "description": "A tiny and basic livereload solution.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "sideEffects": false,
   "exports": {
