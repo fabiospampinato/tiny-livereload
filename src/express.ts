@@ -24,7 +24,7 @@ type Next = {
 
 /* MAIN */
 
-const middleware = ( watchPathForPage?: string | string[], watchPathForStyle?: string | string[] ) => {
+const middleware = ( watchPathForPage?: string | string[], watchPathForStyle?: string | string[], debounce: number = 100 ) => {
 
   /* VERSIONS */
 
@@ -41,7 +41,7 @@ const middleware = ( watchPathForPage?: string | string[], watchPathForStyle?: s
     native: true,
     recursive: true,
     ignoreInitial: true,
-    debounce: 20
+    debounce
   };
 
   const pageWatcher = new Watcher ( watchPathForPage, optionsWatcher );
