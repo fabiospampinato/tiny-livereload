@@ -49,6 +49,7 @@
     "watcher": "^2.2.2"
   },
   "devDependencies": {
+    "@types/node": "^18.15.0",
     "tsex": "^2.2.2",
     "typescript": "^4.9.5"
   }

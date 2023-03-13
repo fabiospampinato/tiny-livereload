@@ -12,19 +12,19 @@ npm install --save tiny-livereload
 
 ## Usage
 
-A `fetch` frontend is provided, which requests `/__livereload__` in a loop.
+A `fetch` frontend is provided, which polls `/__livereload_page__` and `/__livereload_style__`  in a loop.
 
-It also refreshes external stylesheets automatically without reloading the page.
+It reloads the page automatically when the page endpoint returns an update, and it reloads styles without reloading the page when the style endpoint returns an update.
 
 ```ts
 import livereload from 'tiny-livereload/fetch';
 
-// Check for updates every 200ms
+// Check for updates
 
-livereload ( 200 );
+livereload ();
 ```
 
-An `express` middleware for the backend is provided, which serves the `/__livereload__` request, potentially watching some file paths for changes too.
+An `express` middleware for the backend is provided, which serves the `/__livereload_page__` and `/__livereload_style__` endpoints, potentially watching some paths for changes too.
 
 ```ts
 import express from 'express';
@@ -38,7 +38,10 @@ app.use ( livereload () );
 
 // Also watch some paths for changes
 
-app.use ( livereload ( './dist/client' ) );
+const watchPathsForPage = ['./dist/client'];
+const watchPathsForStyle = ['./public/style'];
+
+app.use ( livereload ( watchPathsForPage, watchPathsForStyle ) );
 ```
 
 ## License

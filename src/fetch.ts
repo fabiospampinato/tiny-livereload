@@ -1,50 +1,19 @@
 
 /* IMPORT */
 
-import {ENDPOINT} from './constants';
-
-/* HELPERS */
-
-let versionPage: string = '';
-let versionStyle: string = '';
+import {ENDPOINT_PAGE, ENDPOINT_STYLE} from './constants';
 
 /* MAIN */
 
-//TODO: Add a websocket-based alternative
-
-const fetchPage = async (): Promise<void> => {
-
-  const versionPrev = versionPage;
-  const response = await globalThis.fetch ( ENDPOINT );
-  const version = await response.text ();
-
-  versionPage = version;
-
-  if ( !versionPrev ) return; // First fetch
-
-  if ( versionPage === versionPrev ) return; // Nothing changed
+const onPageUpdate = (): void => {
 
   location.reload ();
 
 };
 
-const fetchStyle = async (): Promise<void> => {
+const onStyleUpdate = (): void => {
 
-  const links = Array.from ( document.querySelectorAll ( 'link[rel="stylesheet"]' ) ) as HTMLLinkElement[]; //TSC
-  const hrefs = links.map ( link => link.href );
-
-  const versionPrev = versionStyle;
-  const responses = await Promise.all ( hrefs.map ( href => globalThis.fetch ( href, { method: 'HEAD' } ) ) );
-  const versions = responses.map ( response => response.headers.get ( 'last-modified' ) );
-  const version = versions.join ( '-' );
-
-  versionStyle = version;
-
-  if ( !versionPrev ) return; // First fetch
-
-  if ( versionStyle === versionPrev ) return; // Nothing changed
-
-  /* REFRESHING */
+  const links = Array.from ( document.getElementsByTagName ( 'link' ) ).filter ( link => link.rel === 'stylesheet' );
 
   for ( let i = 0, l = links.length; i < l; i++ ) {
 
@@ -60,22 +29,54 @@ const fetchStyle = async (): Promise<void> => {
 
 };
 
-const fetch = async ( ms: number = 200 ): Promise<void> => {
+const onEndpointUpdate = ( endpoint: string, onUpdate: () => void ): void => {
 
-  try {
+  let versionLast = '';
 
-    await fetchPage ();
-    await fetchStyle ();
+  const check = async (): Promise<void> => {
 
-  } catch {
+    const versionPrev = versionLast;
+    const response = await globalThis.fetch ( `${endpoint}/${versionPrev}` );
+    const version = await response.text ();
 
-    // The server is probably restarting, or "/__livereload__" isn't set-up properly
+    versionLast = version;
 
-  } finally {
+    if ( !version ) return; // No updates
 
-    setTimeout ( fetch, ms, ms );
+    if ( !versionPrev ) return; // First fetch
 
-  }
+    if ( version === versionPrev ) return; // No updates
+
+    await onUpdate ();
+
+  };
+
+  const loop = async (): Promise<void> => {
+
+    try {
+
+      await check ();
+
+    } catch {
+
+      // The server is probably restarting, or the endpoint isn't set-up properly
+
+    } finally {
+
+      setTimeout ( loop, 0 );
+
+    }
+
+  };
+
+  loop ();
+
+};
+
+const fetch = (): void => {
+
+  onEndpointUpdate ( ENDPOINT_PAGE, onPageUpdate );
+  onEndpointUpdate ( ENDPOINT_STYLE, onStyleUpdate );
 
 };
 
